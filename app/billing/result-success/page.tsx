@@ -1,9 +1,9 @@
 import type { Stripe } from "stripe";
 
-import PrintObject from "@/components/PrintObject";
 import { stripe } from "@/lib/stripe";
+import Link from "next/link";
 
-export default async function ResultPage({
+export default async function ResultSuccessPage({
   searchParams,
 }: {
   searchParams: { session_id: string };
@@ -19,10 +19,15 @@ export default async function ResultPage({
   const paymentIntent = checkoutSession.payment_intent as Stripe.PaymentIntent;
 
   return (
-    <>
-      <h2>Status: {paymentIntent.status}</h2>
-      <h3>Checkout Session response:</h3>
-      <PrintObject content={checkoutSession} />
-    </>
+    <div>
+      <h2 className="text-green-500 font-bold text-xl">SUCCESS</h2>
+      <p>Tokens added successfully!</p>
+      <Link href="/billing" className="mt-10">
+        <button className="checkout-style-background">OK</button>
+      </Link>
+      ---
+      <h5>RESPONSE</h5>
+      <pre>{JSON.stringify(checkoutSession, null, 2)}</pre>
+    </div>
   );
 }
