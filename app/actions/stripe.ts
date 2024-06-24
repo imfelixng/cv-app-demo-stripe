@@ -24,7 +24,7 @@ export async function createCheckoutSession(
           price_data: {
             currency: CURRENCY,
             product_data: {
-              name: "Cost for by tokens",
+              name: "Buy tokens",
             },
             unit_amount: formatAmountForStripe(
               Number(data.get("cost") as string),
