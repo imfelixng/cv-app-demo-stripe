@@ -11,10 +11,6 @@ import { stripe } from "@/lib/stripe";
 export async function createCheckoutSession(
   data: FormData
 ): Promise<{ client_secret: string | null; url: string | null }> {
-  const ui_mode = data.get(
-    "uiMode"
-  ) as Stripe.Checkout.SessionCreateParams.UiMode;
-
   const origin: string = headers().get("origin") as string;
 
   const checkoutSession: Stripe.Checkout.Session =
@@ -28,7 +24,7 @@ export async function createCheckoutSession(
           price_data: {
             currency: CURRENCY,
             product_data: {
-              name: "Custom amount",
+              name: "Cost for by tokens",
             },
             unit_amount: formatAmountForStripe(
               Number(data.get("cost") as string),
@@ -37,10 +33,8 @@ export async function createCheckoutSession(
           },
         },
       ],
-      ...(ui_mode === "hosted" && {
-        success_url: `${origin}/billing/result-success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/billing/result-error`,
-      }),
+      success_url: `${origin}/billing/result-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/billing/result-error`,
     });
 
   return {
